@@ -1,25 +1,48 @@
 #include <iostream>
-#include <math.h>
+//include memset()
+#include <cstring>
+
 using namespace std;
 
-int main()
+/*  The function beneath is a representation of Eratosthenes Sieve, which is and algorithm for
+finding primes by taking the smallest prime number 2 and removing all its multiplications.
+Then doing the same with the next number in array, which is a prime too.*/
+long long eSieve(int n)
 {
-    long long sum=0;
-    for (long i=2;i<2000000;i++)
+    long long sum = 0;
+    //create an boolean array
+    bool prime[n+1];
+    //and set all it's values to true
+    memset(prime, true, sizeof(prime));
+
+    for (int i = 2; i*i <= n; i++)
     {
-        for (long x=2; x*x<=i; x++)
+        //if the number is a prime
+        if (prime[i] == true)
         {
-            if(i % x == 0)
+            //find all its multiplications in range n
+            for ( int j = i*i; j <= n; j += i)
             {
-                break;
-            }
-            else if (x+1 > sqrt(i))
-            {
-                sum+=i;
+                //and set their values to false
+                prime[j] = false;
             }
         }
     }
-    cout << sum+3+2;//becouse the algorithm above skipps the 2 and 3, we need
-    //to add them to the sum
+
+    //now, sum all the numbers
+    for (int i = 2; i <= n; i++)
+    {
+        if (prime[i])
+        {
+            sum += i;
+        }
+    }
+
+    return sum;
+}
+
+int main()
+{
+    cout << eSieve(2000000);
     return 0;
 }
